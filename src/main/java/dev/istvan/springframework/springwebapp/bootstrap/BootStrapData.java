@@ -2,8 +2,10 @@ package dev.istvan.springframework.springwebapp.bootstrap;
 
 import dev.istvan.springframework.springwebapp.domain.Author;
 import dev.istvan.springframework.springwebapp.domain.Book;
+import dev.istvan.springframework.springwebapp.domain.Publisher;
 import dev.istvan.springframework.springwebapp.repositories.AuthorRepository;
 import dev.istvan.springframework.springwebapp.repositories.BookRepository;
+import dev.istvan.springframework.springwebapp.repositories.PublisherRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -12,14 +14,27 @@ public class BootStrapData implements CommandLineRunner {
 
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
+    private final PublisherRepository publisherRepository;
 
-    public BootStrapData(AuthorRepository authorRepository, BookRepository bookRepository) {
+    public BootStrapData(AuthorRepository authorRepository, BookRepository bookRepository, PublisherRepository publisherRepository) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
+        this.publisherRepository = publisherRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
+
+        System.out.println("Started in BootStrap");
+
+        Publisher publisher = new Publisher();
+        publisher.setName("SFG Publishing");
+        publisher.setCity("St Petersburg");
+        publisher.setState("FL");
+
+        publisherRepository.save(publisher);
+
+        System.out.println("Publisher Count: " + publisherRepository.count());
 
         Author eric = new Author("Eric", "Evans");
         Book ddd = new Book("Domain Driven Design", "12345");
@@ -37,9 +52,7 @@ public class BootStrapData implements CommandLineRunner {
         authorRepository.save(rod);
         bookRepository.save(noEJB);
 
-        System.out.println("Started in BootStrap");
         System.out.println("Number of books:" + bookRepository.count());
-
     }
 }
 
